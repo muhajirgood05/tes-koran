@@ -93,6 +93,11 @@ class TesKoran {
         this.state.segments = [];
         this.state.currentSegment = { benar: 0, salah: 0 };
         this.state.elapsedTime = 0;
+        
+        // Inisialisasi angka kedua dengan random agar saat generatePair pertama kali,
+        // n1 (yang mengambil n2 sebelumnya) memiliki nilai awal yang acak.
+        this.state.currentPair = { n1: 0, n2: Math.floor(Math.random() * 10) };
+
         this.setupTestUI();
         this.generatePair();
         this.switchView('test');
@@ -129,8 +134,13 @@ class TesKoran {
                 n2: Math.floor(Math.random() * 10)
             };
         } else {
+            // Berurut: angka terakhir (n2) jadi angka awal (n1), 
+            // namun angka berikutnya (n2 baru) tetap random
             const prev = this.state.currentPair.n2;
-            this.state.currentPair = { n1: prev, n2: (prev + 1) % 10 };
+            this.state.currentPair = { 
+                n1: prev, 
+                n2: Math.floor(Math.random() * 10) 
+            };
         }
         document.getElementById('num-top').textContent = this.state.currentPair.n1;
         document.getElementById('num-bottom').textContent = this.state.currentPair.n2;
