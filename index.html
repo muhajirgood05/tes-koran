@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Koran Pro - Uji Kecepatan & Ketelitian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Main Menu -->
+        <section id="menu-view" class="view active">
+            <div class="menu-header-new">
+                <button id="menu-toggle" class="icon-btn">☰</button>
+                <span class="menu-title">Tes Koran</span>
+            </div>
+            
+            <div class="top-skor-container">
+                <span class="label">Top Skor</span>
+                <div class="top-val-row">
+                    <span id="top-speed" class="big-val">0</span>
+                    <span class="small-label">/menit</span>
+                </div>
+                <div class="top-acc-row">
+                    <span>Akurasi <span id="top-acc">0</span></span>
+                </div>
+            </div>
+            
+            <div class="menu-actions-new">
+                <button id="open-settings" class="btn primary">Mulai Tes</button>
+                <button id="stats-btn-main" class="btn secondary">Statistik</button>
+            </div>
+        </section>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Pengaturan</span>
+                    <button id="close-settings" class="modal-close">×</button>
+                </div>
+                
+                <div class="setting-group">
+                    <label>Waktu (dalam menit)</label>
+                    <div class="radio-grid">
+                        <label class="radio-item"><input type="radio" name="time" value="1" checked> 1</label>
+                        <label class="radio-item"><input type="radio" name="time" value="2"> 2</label>
+                        <label class="radio-item"><input type="radio" name="time" value="5"> 5</label>
+                        <label class="radio-item"><input type="radio" name="time" value="11.5"> 11.5</label>
+                        <label class="radio-item"><input type="radio" name="time" value="22.5"> 22.5</label>
+                        <label class="radio-item"><input type="radio" name="time" value="30"> 30</label>
+                    </div>
+                    <div class="custom-time">
+                        <label class="radio-item"><input type="radio" name="time" value="custom"> isi sendiri</label>
+                        <div class="input-wrapper">
+                            <span class="input-hint">Silahkan isi</span>
+                            <input type="number" id="custom-time-val" value="3">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>Tipe soal</label>
+                    <div class="radio-row">
+                        <label class="radio-item"><input type="radio" name="type" value="berurut"> Berurut</label>
+                        <label class="radio-item"><input type="radio" name="type" value="acak" checked> Acak</label>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>Format soal</label>
+                    <div class="radio-row">
+                        <label class="radio-item"><input type="radio" name="format" value="horizontal"> Horizontal</label>
+                        <label class="radio-item"><input type="radio" name="format" value="vertikal" checked> Vertikal</label>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>Layout keyboard</label>
+                    <div class="radio-row">
+                        <label class="radio-item"><input type="radio" name="layout" value="123" checked> Layout 123</label>
+                        <label class="radio-item"><input type="radio" name="layout" value="789"> Layout 789</label>
+                    </div>
+                </div>
+
+                <button id="start-test-final" class="btn-mulai">Mulai</button>
+            </div>
+        </div>
+
+        <!-- Test View -->
+        <section id="test-view" class="view">
+            <div class="test-header-new">
+                <div class="header-top">
+                    <button id="close-test" class="btn-tutup"><span class="icon-x">×</span> Tutup</button>
+                </div>
+                <div class="header-bottom">
+                    <div class="score-new">Skor <span id="current-score">0</span></div>
+                    <div id="timer" class="timer-new">00:00:00</div>
+                </div>
+            </div>
+
+            <div class="question-container" id="question-container">
+                <div id="q-box" class="question-box">
+                    <div id="q-nums" class="num-stack">
+                        <div id="num-top" class="num-main">0</div>
+                        <div id="num-bottom" class="num-main">0</div>
+                    </div>
+                    <div class="question-mark">?</div>
+                </div>
+            </div>
+
+            <div class="keypad-new" id="keypad-container">
+                <!-- Injected via JS based on layout setting -->
+            </div>
+        </section>
+
+        <!-- Result View -->
+        <section id="result-view" class="view">
+            <div class="result-card">
+                <h2>Hasil Tes</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Benar</span>
+                        <span id="res-correct" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Kecepatan (JPM)</span>
+                        <span id="res-speed" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button id="back-to-menu" class="btn secondary">Menu</button>
+                    <button id="retry-btn" class="btn primary">Ulangi</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats View -->
+        <section id="stats-view" class="view">
+            <div class="stats-header-new">
+                <button id="stats-back" class="icon-btn">←</button>
+                <span class="stats-title">Statistik (<span id="stats-count">0</span>)</span>
+                <button id="delete-history" class="icon-btn trash-btn">🗑️</button>
+            </div>
+            
+            <div class="chart-section">
+                <div class="chart-container-large">
+                    <canvas id="history-chart-large"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <span class="legend-item"><span class="dot yellow"></span> Rata-rata</span>
+                    <span class="legend-item"><span class="dot orange"></span> Akurasi</span>
+                </div>
+                <p class="chart-note">*)jawaban benar dalam 1 menit. **)dlm persen</p>
+            </div>
+
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Menit</th>
+                            <th>Benar</th>
+                            <th>Salah</th>
+                            <th>Rata2*</th>
+                            <th>Akurasi**</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <!-- History rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Session Detail View -->
+        <section id="detail-view" class="view">
+            <div class="stats-header-new">
+                <button id="detail-back" class="icon-btn">←</button>
+                <span class="stats-title">Grafik</span>
+            </div>
+            
+            <div class="detail-content">
+                <div id="detail-timestamp" class="detail-timestamp">2026-05-01 00:00:00</div>
+                
+                <div class="chart-section">
+                    <div class="chart-container-large">
+                        <canvas id="detail-session-chart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="dot yellow"></span> Benar</span>
+                        <span class="legend-item"><span class="dot orange"></span> Salah</span>
+                    </div>
+                </div>
+
+                <div class="detail-stats-list">
+                    <div class="detail-row">
+                        <span>Total benar : <b id="det-benar">0</b></span>
+                        <span>Total Salah : <b id="det-salah">0</b></span>
+                    </div>
+                    <div class="detail-item">Waktu : <span id="det-waktu">0 menit</span></div>
+                    <div class="detail-item">Waktu per segmen : <span>15 detik</span></div>
+                    <div class="detail-item">Kecepatan : <span id="det-speed">0 (Normal)</span></div>
+                    <div class="detail-item">Akurasi : <span id="det-acc">0% (Cukup)</span></div>
+                    <div class="detail-item">Keajegan : <span id="det-keajegan">0 (Cukup)</span></div>
+                    <div class="detail-item">Ketahanan : <span id="det-ketahanan">0 (Cukup)</span></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Chart.js for stats -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js" type="module"></script>
+</body>
+</html>
